@@ -1,0 +1,14 @@
+Package: qualtricsr
+Type: Package
+Version: 0.1.0.9000
+Title: Common functions used with Qualtrics surveys
+Description: Handles routine functions when working with Qualtrics surveys.
+    Note that specificites exist regarding the creation and use of these surveys by Simon Jackson.
+Authors@R: c(
+  person("Simon", "Jackson", email = "drsimonjackson@gmail.com", role = c("aut", "cre"))
+  )
+URL: https://github.com/drsimonj/qualtrics
+BugReports: https://github.com/drsimonj/qualtrics/issues
+Depends: R (>= 3.3.1)
+License: MIT + file LICENSE
+LazyData: TRUE
