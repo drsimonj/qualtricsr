@@ -28,7 +28,15 @@ q_readv <- function(file) {
 
 #' Read qualtrics file as a tibble
 #'
+#' Reads in a qualtrics file and handles formatting of header rows. Variable
+#' names contained in the first two rows are read via \code{\link{q_readv}}. The
+#' remainder of the data set is then read in, using the formatted variable names
+#' as column names.
+#'
 #' @export
+#' @inheritParams readr::read_csv
+#'
+#' @return tibble. Column names derived using \code{\link{q_readv}}
 q_read <- function(file) {
   # Read vars
   .v <- q_readv(file)
