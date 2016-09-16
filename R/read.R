@@ -45,6 +45,6 @@ q_read <- function(file) {
   .d <- readr::read_csv(file, skip = 2, col_names = .v$var)
 
   # Return with `q_df` class
-  class(.d) <- c("q_df", class(.d))
+  class(.d) <- c("q_tbl", class(.d))
   .d
 }
