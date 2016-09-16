@@ -2,4 +2,5 @@
 
 export(q_read)
 export(q_readv)
+export(q_tidyloops)
 importFrom(magrittr,"%>%")

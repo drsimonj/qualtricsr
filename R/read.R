@@ -9,10 +9,11 @@
 #' name.
 #'
 #' @inheritParams readr::read_lines
+#' @drop_empty Boolean. Should empty variables be dropped?
 #' @export
 #'
 #' @return tibble with variable (`var`) and corresponding label columns.
-q_readv <- function(file) {
+q_readv <- function(file, drop_empty = TRUE) {
   # Read the first two lines of the file
   .v <- readr::read_lines(file, n_max = 2) %>%
                stringr::str_split(",")
@@ -22,6 +23,9 @@ q_readv <- function(file) {
   .v[[1]][to_replace] <- .v[[2]][to_replace]
 
   names(.v) <- c("var", "label")
+
+  if (drop_empty)
+    .v <- .v %>% dplyr::filter(var != "")
 
   tibble::as_tibble(.v)
 }
@@ -39,10 +43,13 @@ q_readv <- function(file) {
 #' @return tibble. Column names derived using \code{\link{q_readv}}
 q_read <- function(file) {
   # Read vars
-  .v <- q_readv(file)
+  .v <- q_readv(file, drop_empty = F)
 
   # Import data
   .d <- readr::read_csv(file, skip = 2, col_names = .v$var)
+
+  # Drop any empty columns
+  .d <- .d[, .v$var != ""]
 
   # Return with `q_df` class
   class(.d) <- c("q_tbl", class(.d))

@@ -5,7 +5,7 @@
 \title{Read variable information from a qualtrics file into a tibble of variable
 names and labels}
 \usage{
-q_readv(file)
+q_readv(file, drop_empty = TRUE)
 }
 \arguments{
 \item{file}{Either a path to a file, a connection, or literal data
