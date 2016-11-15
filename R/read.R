@@ -13,21 +13,27 @@
 #' @export
 #'
 #' @return tibble with variable (`var`) and corresponding label columns.
-q_readv <- function(file, drop_empty = TRUE) {
+q_readv <- function(file, drop_empty = TRUE, comma_warn = TRUE) {
   # Read the first two lines of the file
   .v <- readr::read_lines(file, n_max = 2) %>%
                stringr::str_split(",")
 
   # Replace that Qualtrics variables named V1, V2, etc...
-  to_replace <- stringr::str_detect(.v[[1]], "^V[0-9]+$")
+  to_replace <- which(stringr::str_detect(.v[[1]], "^V[0-9]+$"))
   .v[[1]][to_replace] <- .v[[2]][to_replace]
 
   names(.v) <- c("var", "label")
 
-  if (drop_empty)
-    .v <- .v %>% dplyr::filter(var != "")
+  if (length(.v$var) == length(.v$label)) {
+    .v <- tibble::as_tibble(.v)
 
-  tibble::as_tibble(.v)
+    if (drop_empty)
+      .v <- .v %>% dplyr::filter(var != "")
+  } else if (comma_warn) {
+    warning("There were commas in the second line meaning that question numbers and text will not align.")
+  }
+
+  .v
 }
 
 #' Read qualtrics file as a tibble
@@ -43,7 +49,7 @@ q_readv <- function(file, drop_empty = TRUE) {
 #' @return tibble. Column names derived using \code{\link{q_readv}}
 q_read <- function(file) {
   # Read vars
-  .v <- q_readv(file, drop_empty = F)
+  .v <- q_readv(file, drop_empty = F, comma_warn = F)
 
   # Import data
   .d <- readr::read_csv(file, skip = 2, col_names = .v$var)
