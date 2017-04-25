@@ -53,15 +53,13 @@ q_read <- function(file) {
 
   # Identify any empty columns
   is_empty <- .v$var == ""
-  if (any(is_empty))
-    .v[is_empty, "var"] <- paste0("___", seq(sum(is_empty)))
+  .v$var[is_empty] <- paste0("___", seq(sum(is_empty)))
 
   # Import data
   .d <- readr::read_csv(file, skip = 2, col_names = .v$var)
 
   # Drop any empty columns
-  if (any(is_empty))
-    .d <- .d[, !is_empty]
+  .d <- .d[, !is_empty]
 
   # Return with `q_df` class
   class(.d) <- c("q_tbl", class(.d))
